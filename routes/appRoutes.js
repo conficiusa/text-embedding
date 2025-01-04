@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.patch("/doctor/create/:id/", getDoctorEmbedding);
-router.patch("/doctor/create/", createEmbeddings);
+router.get("/doctor/create/", createEmbeddings);
 router.get("/createVectorIndex/", createVectorIndex);
 router.post("/vectorSearch/", RunVectorSearch);
 router.get("/", (req, res) => {
