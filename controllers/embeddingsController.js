@@ -53,15 +53,15 @@ export const createEmbeddings = async (req, res, next) => {
 export async function createVectorIndex(req, res, next) {
   try {
     const index = {
-      name: "confi",
+      name: "vectorSearchIndex",
       type: "vectorSearch",
       definition: {
         fields: [
           {
             type: "vector",
             path: "embedding",
-            similarity: "cosine",
-            numDimensions: 768,
+            similarity: "dotProduct",
+            numDimensions: 384,
           },
         ],
       },
@@ -72,7 +72,6 @@ export async function createVectorIndex(req, res, next) {
       console.log("Search index created successfully");
     }
 
-    console.log(result);
     res.status(200).json({ success: true, message: "Index created" });
   } catch (error) {
     console.error(error);
@@ -95,7 +94,7 @@ export async function RunVectorSearch(req, res, next) {
     const pipeline = [
       {
         $vectorSearch: {
-          index: "confi",
+          index: "vectorSearchIndex",
           queryVector: queryEmbedding,
           path: "embedding",
           limit: 5,
@@ -122,7 +121,6 @@ export async function RunVectorSearch(req, res, next) {
 
     // run pipeline
     const result = await User.aggregate(pipeline);
-    console.log("Search results: ", result);
     res.status(200).json({ success: true, result });
   } catch (error) {
     console.error(error);
@@ -131,5 +129,5 @@ export async function RunVectorSearch(req, res, next) {
 }
 
 export const welcomeController = (req, res) => {
-  res.status(200).send('Welcome to MedCare');
+  res.status(200).send("Welcome to MedCare");
 };
